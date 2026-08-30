@@ -1,0 +1,15 @@
+# Data Science & Machine Learning Stack
+pandas
+numpy
+scikit-learn
+lightgbm
+xgboost
+optuna
+
+# Data Visualization & Reporting
+matplotlib
+seaborn
+sweetviz
+
+# Model Persistence & Utilities
+joblib
