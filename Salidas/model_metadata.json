@@ -4,16 +4,16 @@
         "model_version": "1.0.0",
         "description": "Modelo supervisado para detección de fraude transaccional altamente desbalanceado.",
         "author": "Equipo de Data Science / Analytics",
-        "created_at": "2026-08-30 15:52:26",
+        "created_at": "2026-08-30 16:42:18",
         "framework": "xgboost / scikit-learn",
         "algorithm": "XGBClassifier"
     },
     "decision_threshold": {
         "optimal_threshold": 0.9812476634979248,
-        "threshold_metric_criterion": "F1-Score / Precision-Recall Optimization"
+        "threshold_metric_criterion": "F2-Score / Precision-Recall Optimization"
     },
     "data_schema": {
-        "target_variable": "is_fraud",
+        "target_variable": "es_fraude",
         "num_features": 41,
         "feature_names": [
             "variable_01",
