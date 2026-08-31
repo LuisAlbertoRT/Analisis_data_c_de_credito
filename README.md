@@ -5,7 +5,7 @@
 ![PR-AUC](https://img.shields.io/badge/PR--AUC-0.8860-brightgreen?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Production--Ready-success?style=flat-square)
 
-Solución de Machine Learning de extremo a extremo para la detección y mitigación de fraude transaccional en entornos de alto desbalance de clases. El sistema utiliza una arquitectura basada en **XGBoost Classifier** optimizado mediante binarización de probabilidad y análisis fuera de muestra (Out-of-Fold).
+Solución de Machine Learning para la detección y mitigación de fraude transaccional en entornos de alto desbalance de clases. El sistema utiliza una arquitectura basada en **XGBoost Classifier** optimizado mediante binarización de probabilidad y análisis fuera de muestra.
 
 
 ## 🎯 Descripción del Problema
