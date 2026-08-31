@@ -1,4 +1,4 @@
-# 🛡️ Fraud Detection Engine — XGBoost Architecture
+#  Detector de Fraude Transaccional — XGBoost 
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)
 ![XGBoost](https://img.shields.io/badge/Model-XGBoost-orange?style=flat-square)
@@ -8,7 +8,7 @@
 Solución de Machine Learning para la detección y mitigación de fraude transaccional en entornos de alto desbalance de clases. El sistema utiliza una arquitectura basada en **XGBoost Classifier** optimizado mediante binarización de probabilidad y análisis fuera de muestra.
 
 
-## 🎯 Descripción del Problema
+##  Descripción del Problema
 
 El objetivo es clasificar y prevenir operaciones fraudulentas en solicitudes transaccionales mediante datos históricos. 
 
@@ -19,7 +19,7 @@ El objetivo es clasificar y prevenir operaciones fraudulentas en solicitudes tra
 
 ---
 
-## 📁 Estructura del Repositorio
+## Estructura del Repositorio
 
 ```text
 .
