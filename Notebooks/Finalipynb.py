@@ -367,6 +367,19 @@ def objective_rf(trial):
 #best_xgb.fit(X_train, y_train)
 
 # %%
+parametros_originales_f = {
+    'n_estimators': 432,
+    'learning_rate': 0.038919997563362715,
+    'max_depth': 6,
+    'subsample': 0.8001201242229923,
+    'colsample_bytree': 0.710799660783632,
+    'scale_pos_weight': 223.94350677075371,
+    'reg_alpha': 2.006923372947634,
+    'reg_lambda': 3.477362954209379,
+    'gamma': 3.4232564999517594
+}
+
+# %%
 
 # Ejecución de las Búsquedas (con LIGHTGBM)
 
@@ -406,21 +419,23 @@ def objective_rf(trial):
 
 # Instanciar los 3 modelos optimizados
 params_xgb = {
-    'n_estimators': 1500,  # Aumentado para que el Early Stopping decida el corte real
-    'learning_rate': 0.051649232072272615,
-    'max_depth': 5,
-    'subsample': 0.9658075634630385,
-    'colsample_bytree': 0.6261278549784421,
-    'scale_pos_weight': 201.2089646115566,
-    'reg_alpha': 0.0013332399017578604,
-    'reg_lambda': 0.1381424424249814,
-    'gamma': 0.00010212425872946351,
+    # Se incrementa n_estimators para permitir que el early stopping determine el mejor número de árboles
+    'n_estimators': 1500,  
+    'learning_rate': 0.038919997563362715,
+    'max_depth': 6,
+    'subsample': 0.8001201242229923,
+    'colsample_bytree': 0.710799660783632,
+    'scale_pos_weight': 223.94350677075371,
+    'reg_alpha': 2.006923372947634,
+    'reg_lambda': 3.477362954209379,
+    'gamma': 3.4232564999517594,
+    
+    # Parámetros de control y monitoreo
     'random_state': 42,
     'n_jobs': -1,
-    'eval_metric': 'aucpr',  # Optimiza directamente PR-AUC durante la validación
-    'early_stopping_rounds': 20,  # Detiene si no hay mejora en 30 iteraciones consecutivas
+    'eval_metric': 'aucpr',         # Optimización directa de PR-AUC
+    'early_stopping_rounds': 30     # Detiene si no hay mejora en 30 iteraciones consecutivas
 }
-
 
 params_lgb = {
     'n_estimators': 346,
@@ -726,7 +741,7 @@ df_predicciones = pd.DataFrame(
     {"id_solicitante": id_test, "score": y_scores}
 ).reset_index(drop=True)
 # Guarda las predicciones
-df_predicciones.to_csv("Salidas/predicciones_test.csv", index=False)
+df_predicciones.to_csv("Salidas/Modelos_finales/predicciones_test.csv", index=False)
 
 print("CSV generado exitosamente con forma:", df_predicciones.shape)
 print(df_predicciones.head())
@@ -738,10 +753,10 @@ print(classification_report(y_test, y_pred_final, target_names=['Legítimo (0)',
 
 # 5. GUARDAR ARTEFACTO COMPLETO A DISCO
 
-os.makedirs("Salidas", exist_ok=True)
-file_name = "Salidas/modelo_fraude_xgboost_final.joblib"
+os.makedirs("Salidas/Modelos_finales", exist_ok=True)
+file_name = 'Salidas/Modelos_finales/modelo_fraude_xgboost_final.joblib'
 joblib.dump(fraud_detector_final, file_name)
-print(f"✅ Modelo guardado exitosamente en '{file_name}'")
+print(f" Modelo guardado exitosamente en '{file_name}'")
 
 # %% [markdown]
 # #### 5.7) Monitorear problema de sobre ajuste
@@ -767,7 +782,7 @@ final_xgb_model = XGBClassifier(**params_xgb)
 final_xgb_model.fit(X_tr, y_tr, eval_set=[(X_val, y_val)], verbose=False)
 
 print(
-    f"✅ Entrenamiento detenido en el árbol {final_xgb_model.best_iteration} (de"
+    f" Entrenamiento detenido en el árbol {final_xgb_model.best_iteration} (de"
     f" {final_xgb_model.n_estimators} máximos)."
 )
 
@@ -801,15 +816,15 @@ print('=' * 65)
 
 # Veredicto de Overfitting
 if gap_pr_auc <= 0.05:
-    print('✅ VEREDICTO: Excelente generalización. No hay overfitting crítico.')
+    print(' VEREDICTO: Excelente generalización. No hay overfitting crítico.')
 elif gap_pr_auc <= 0.10:
     print(
-        '⚠️ VEREDICTO: Aceptable. Existe un ligero sobreajuste dentro de los'
+        ' VEREDICTO: Aceptable. Existe un ligero sobreajuste dentro de los'
         ' límites operativos.'
     )
 else:
     print(
-        '❌ VEREDICTO: Overfitting severo. Se requiere aumentar la regularización'
+        ' VEREDICTO: Overfitting severo. Se requiere aumentar la regularización'
         ' (reg_alpha/reg_lambda o min_child_weight).'
     )
 print('=' * 65 + '\n')
@@ -875,10 +890,10 @@ print(
 
 
 
-os.makedirs("Salidas", exist_ok=True)
-file_name = 'Salidas/modelo_fraude_xgboost_final.joblib'
+os.makedirs("Salidas/Modelos_finales", exist_ok=True)
+file_name = 'Salidas/Modelos_finales/modelo_fraude_xgboost_final.joblib'
 joblib.dump(fraud_detector_final, file_name)
-print(f"✅ Modelo guardado exitosamente en '{file_name}'")
+print(f" Modelo guardado exitosamente en '{file_name}'")
 
 # %% [markdown]
 # ### 6) Reporte de mejor modelo
@@ -1159,12 +1174,12 @@ metadata = {
 
 # 2. ESCRITURA EN ARCHIVO JSON
 
-os.makedirs("Salidas", exist_ok=True)
-json_filepath = "Salidas/model_metadata.json"
+os.makedirs("Salidas/Modelos_finales", exist_ok=True)
+json_filepath = "Salidas/Modelos_finales/model_metadata.json"
 
 with open(json_filepath, "w", encoding="utf-8") as f:
     json.dump(metadata, f, indent=4, ensure_ascii=False)
 
-print(f"✅ Archivo de metadatos guardado exitosamente en: '{json_filepath}'")
+
 
 
