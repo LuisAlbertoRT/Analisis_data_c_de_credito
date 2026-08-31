@@ -51,7 +51,6 @@ Configuración óptima del estimador `XGBClassifier` seleccionada mediante optim
   "random_state": 42,
   "n_jobs": -1
 }
-```[cite: 5]
 
 ---
 
