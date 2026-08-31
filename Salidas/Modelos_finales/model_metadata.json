@@ -4,7 +4,7 @@
         "model_version": "1.0.0",
         "description": "Modelo supervisado para detección de fraude transaccional altamente desbalanceado.",
         "author": "Equipo de Data Science / Analytics",
-        "created_at": "2026-08-30 18:57:48",
+        "created_at": "2026-08-30 19:24:23",
         "framework": "xgboost / scikit-learn",
         "algorithm": "XGBClassifier"
     },
