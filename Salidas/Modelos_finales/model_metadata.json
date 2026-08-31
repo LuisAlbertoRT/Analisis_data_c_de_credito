@@ -4,12 +4,12 @@
         "model_version": "1.0.0",
         "description": "Modelo supervisado para detección de fraude transaccional altamente desbalanceado.",
         "author": "Equipo de Data Science / Analytics",
-        "created_at": "2026-08-30 17:48:58",
+        "created_at": "2026-08-30 18:57:48",
         "framework": "xgboost / scikit-learn",
         "algorithm": "XGBClassifier"
     },
     "decision_threshold": {
-        "optimal_threshold": 0.9473651051521301,
+        "optimal_threshold": 0.5061572790145874,
         "threshold_metric_criterion": "F2-Score / Precision-Recall Optimization"
     },
     "data_schema": {
@@ -66,23 +66,23 @@
         "callbacks": null,
         "colsample_bylevel": null,
         "colsample_bynode": null,
-        "colsample_bytree": 0.6261278549784421,
+        "colsample_bytree": 0.710799660783632,
         "device": null,
-        "early_stopping_rounds": 20,
+        "early_stopping_rounds": 30,
         "enable_categorical": true,
         "eval_metric": "aucpr",
         "feature_types": null,
         "feature_weights": null,
-        "gamma": 0.00010212425872946351,
+        "gamma": 3.4232564999517594,
         "grow_policy": null,
         "importance_type": null,
         "interaction_constraints": null,
-        "learning_rate": 0.051649232072272615,
+        "learning_rate": 0.038919997563362715,
         "max_bin": null,
         "max_cat_threshold": null,
         "max_cat_to_onehot": null,
         "max_delta_step": null,
-        "max_depth": 5,
+        "max_depth": 6,
         "max_leaves": null,
         "min_child_weight": null,
         "missing": NaN,
@@ -92,46 +92,46 @@
         "n_jobs": -1,
         "num_parallel_tree": null,
         "random_state": 42,
-        "reg_alpha": 0.0013332399017578604,
-        "reg_lambda": 0.1381424424249814,
+        "reg_alpha": 2.006923372947634,
+        "reg_lambda": 3.477362954209379,
         "sampling_method": null,
-        "scale_pos_weight": 201.2089646115566,
-        "subsample": 0.9658075634630385,
+        "scale_pos_weight": 223.94350677075371,
+        "subsample": 0.8001201242229923,
         "tree_method": null,
         "validate_parameters": null,
         "verbosity": null
     },
     "performance_metrics": {
         "test_set": {
-            "pr_auc": 0.8860292409247318,
-            "roc_auc": 0.993434593526941,
-            "precision": 0.9375,
-            "recall": 0.7894736842105263,
-            "f1_score": 0.8571428571428571,
-            "f2_score": 0.8152173913043478,
-            "false_positive_rate": 8.825969532753173e-05
+            "pr_auc": 0.796759577579998,
+            "roc_auc": 0.9799247284156269,
+            "precision": 0.9125,
+            "recall": 0.7684210526315789,
+            "f1_score": 0.8342857142857143,
+            "f2_score": 0.7934782608695652,
+            "false_positive_rate": 0.0001235635734585444
         },
         "confusion_matrix_test": {
-            "true_negatives_TN": 56646,
-            "false_positives_FP": 5,
-            "false_negatives_FN": 20,
-            "true_positives_TP": 75
+            "true_negatives_TN": 56644,
+            "false_positives_FP": 7,
+            "false_negatives_FN": 22,
+            "true_positives_TP": 73
         },
         "generalization_gap": {
-            "pr_auc_gap": 0.09212559109168195,
-            "roc_auc_gap": 0.006535064455115647
+            "pr_auc_gap": 0.04688939479219301,
+            "roc_auc_gap": 0.01896290344680418
         }
     },
     "feature_importance_top10": {
-        "variable_15": 0.3521580696105957,
-        "variable_19": 0.08903590589761734,
-        "variable_17": 0.05106206238269806,
-        "variable_25": 0.03572099655866623,
-        "deciles": 0.029408197849988937,
-        "amount_log": 0.023729722946882248,
-        "variable_12": 0.023636233061552048,
-        "variable_21": 0.02340184524655342,
-        "day": 0.02307433821260929,
-        "variable_16": 0.020111795514822006
+        "variable_15": 0.3768540322780609,
+        "variable_19": 0.13607893884181976,
+        "variable_17": 0.04104766249656677,
+        "variable_25": 0.028186406940221786,
+        "variable_21": 0.02172125317156315,
+        "variable_12": 0.020332442596554756,
+        "amount_log": 0.017453329637646675,
+        "hour_cos": 0.0166335329413414,
+        "variable_01": 0.015766730532050133,
+        "variable_29": 0.014831118285655975
     }
 }
