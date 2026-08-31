@@ -4,16 +4,16 @@
         "model_version": "1.0.0",
         "description": "Modelo supervisado para detección de fraude transaccional altamente desbalanceado.",
         "author": "Equipo de Data Science / Analytics",
-        "created_at": "2026-08-30 15:57:39",
+        "created_at": "2026-08-30 17:48:58",
         "framework": "xgboost / scikit-learn",
         "algorithm": "XGBClassifier"
     },
     "decision_threshold": {
-        "optimal_threshold": 0.9812476634979248,
-        "threshold_metric_criterion": "F1-Score / Precision-Recall Optimization"
+        "optimal_threshold": 0.9473651051521301,
+        "threshold_metric_criterion": "F2-Score / Precision-Recall Optimization"
     },
     "data_schema": {
-        "target_variable": "is_fraud",
+        "target_variable": "es_fraude",
         "num_features": 41,
         "feature_names": [
             "variable_01",
@@ -103,35 +103,35 @@
     },
     "performance_metrics": {
         "test_set": {
-            "pr_auc": 0.8737739223911182,
-            "roc_auc": 0.9859314346869869,
-            "precision": 0.9629629629629629,
-            "recall": 0.7959183673469388,
-            "f1_score": 0.8715083798882681,
-            "f2_score": 0.8245243128964059,
-            "false_positive_rate": 5.2757456387169386e-05
+            "pr_auc": 0.8860292409247318,
+            "roc_auc": 0.993434593526941,
+            "precision": 0.9375,
+            "recall": 0.7894736842105263,
+            "f1_score": 0.8571428571428571,
+            "f2_score": 0.8152173913043478,
+            "false_positive_rate": 8.825969532753173e-05
         },
         "confusion_matrix_test": {
-            "true_negatives_TN": 56861,
-            "false_positives_FP": 3,
+            "true_negatives_TN": 56646,
+            "false_positives_FP": 5,
             "false_negatives_FN": 20,
-            "true_positives_TP": 78
+            "true_positives_TP": 75
         },
         "generalization_gap": {
-            "pr_auc_gap": 0.0899043270394736,
-            "roc_auc_gap": 0.014012533306987818
+            "pr_auc_gap": 0.09212559109168195,
+            "roc_auc_gap": 0.006535064455115647
         }
     },
     "feature_importance_top10": {
-        "variable_15": 0.3190957009792328,
-        "variable_19": 0.10252340883016586,
-        "variable_17": 0.0549861416220665,
-        "variable_25": 0.0405743271112442,
-        "deciles": 0.029460478574037552,
-        "variable_12": 0.024243902415037155,
-        "variable_16": 0.02068316377699375,
-        "variable_09": 0.020167754963040352,
-        "variable_08": 0.018432915210723877,
-        "variable_10": 0.018267501145601273
+        "variable_15": 0.3521580696105957,
+        "variable_19": 0.08903590589761734,
+        "variable_17": 0.05106206238269806,
+        "variable_25": 0.03572099655866623,
+        "deciles": 0.029408197849988937,
+        "amount_log": 0.023729722946882248,
+        "variable_12": 0.023636233061552048,
+        "variable_21": 0.02340184524655342,
+        "day": 0.02307433821260929,
+        "variable_16": 0.020111795514822006
     }
 }

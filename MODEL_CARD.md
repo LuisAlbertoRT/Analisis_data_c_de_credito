@@ -1,93 +1,63 @@
-# Model Card: Fraud_Detector_XGBoost
+# Model Card: Fraud Detector XGBoost (v1.0.0)
 
-## 1. Información General
-* **Nombre del Modelo:** `Fraud_Detector_XGBoost`
-* **Versión:** `1.0.0`
-* **Fecha de Creación:** 30 de agosto de 2026
-* **Autor:** Luis Alberto Rueda Tapia
-* **Framework:** XGBoost (`XGBClassifier`) / Scikit-Learn
-* **Descripción:** Modelo de aprendizaje supervisado diseñado para la detección de fraude transaccional en conjuntos de datos altamente desbalanceados.
-
----
-
-## 2. Uso Intencionado y Limitaciones
-* **Caso de Uso Principal:** Clasificación transaccional en tiempo real o en lote para predecir si una operación es fraudulenta (`is_fraud = 1`) o legítima (`is_fraud = 0`).
-* **Criterio de Decisión:**
-  * **Umbral Óptimo de Decisión:** `0.9812`
-  * **Criterio de Optimización:** Maximización de F1-Score y curva Precision-Recall.
+## 1. Visión General del Modelo
+- **Nombre:** Fraud_Detector_XGBoost[cite: 7]
+- **Versión:** 1.0.0[cite: 7]
+- **Tipo de Modelo:** Clasiﬁcador Gradiente Gradiente Descentralizado (XGBoost / `XGBClassifier`)[cite: 7]
+- **Fecha de creación:** 2026-08-30[cite: 7]
+- **Desarrollado por:** Equipo de Data Science / Analytics[cite: 7]
+- **Objetivo:** Predecir si una solicitud transaccional debe ser rechazada/bloqueada por riesgo de fraude (`es_fraude = 1`) o aprobada (`es_fraude = 0`)[cite: 6, 7].
 
 ---
 
-## 3. Esquema de Datos y Variables
-* **Variable Objetivo:** `is_fraud`
-* **Número de Features:** 41 variables de entrada
-* **Features Destacadas:**
-  * Variables numéricas / transformadas (`variable_01` a `variable_32`)
-  * Transformaciones temporales y de monto (`amount_log`, `hour`, `day`, `is_night_transaction`, `hour_sin`, `hour_cos`)
-  * Bins y discretización (`deciles`, `es_uno_o_menos`, `es_cero`)
+## 2. Datos de Entrenamiento y Evaluación
+- **Fuente de datos:** `datos_fraud.csv` (284,807 registros con 492 casos positivos de fraude, <0.2% de prevalencia)[cite: 6].
+- **Esquema de División:** Split estratificado 80/20 manteniendo el balance de clase en entrenamiento y prueba[cite: 6].
+- **Total de Características Utilizadas:** 41 variables (incluyendo 32 numéricas transformadas, indicadores de monto binarios y ciclos temporales)[cite: 6, 7].
 
 ---
 
-## 4. Métricas de Rendimiento (Test Set)
+## 3. Desempeño del Modelo
 
-### Evaluación Cuantitativa
-| Métrica | Valor | Descripción / Observaciones |
-| :--- | :--- | :--- |
-| **PR-AUC** | `0.8738` | Métrica principal dada la naturaleza desbalanceada |
-| **ROC-AUC** | `0.9859` | Capacidad global de discriminación del modelo |
-| **Precision** | `0.9630` | El 96.3% de las alertas generadas son fraude real |
-| **Recall** | `0.7959` | El modelo captura el 79.6% del fraude total |
-| **F1-Score** | `0.8715` | Balance armónico entre Precisión y Recall |
-| **F2-Score** | `0.8245` | Ponderación priorizando la captura de fraudes |
-| **FPR** | `0.000053` | Tasa extremadamente baja de falsos positivos (0.005%) |
+Métricas evaluadas sobre el **Conjunto de Test (In Sample Testing / Imparcial)** aplicando el **Umbral Óptimo de Decisión (0.9474)**[cite: 6, 7]:
+
+### Métricas Globales Discriminativas
+- **PR-AUC (Métrica Principal):** 0.8860[cite: 7]
+- **ROC-AUC:** 0.9934[cite: 7]
+- **Gap de Generalización PR-AUC (Train - Test):** 0.0921 (Generalización estable)[cite: 7]
 
 ### Matriz de Confusión en Test
-```text
-                  Predicho Legítimo    Predicho Fraude
-Real Legítimo        56,861 (TN)           3 (FP)
-Real Fraude              20 (FN)          78 (TP)
-```
-* **Verdaderos Negativos (TN):** 56,861 transacciones legítimas correctamente identificadas.
-* **Falsos Positivos (FP):** Solo 3 falsas alarmas enviadas a revisión.
-* **Falsos Negativos (FN):** 20 casos de fraude no detectados.
-* **Verdaderos Positivos (TP):** 78 fraudes interceptados correctamente.
+- **Verdaderos Negativos (TN):** 56,646 legítimos aprobados correctamente[cite: 7]
+- **Falsos Positivos (FP):** 5 legítimos bloqueados por error[cite: 7]
+- **Falsos Negativos (FN):** 20 fraudes no detectados[cite: 7]
+- **Verdaderos Positivos (TP):** 75 fraudes identificados y bloqueados[cite: 7]
 
-### Brecha de Generalización (Gap Train-Test)
-* **PR-AUC Gap:** `0.0899`
-* **ROC-AUC Gap:** `0.0140`
+### Métricas de Clasificación
+- **Precision (Exactitud de la alerta):** 93.75%[cite: 7]
+- **Recall (Cobertura de captura):** 78.95%[cite: 7]
+- **F1-Score:** 0.8571[cite: 7]
+- **F2-Score:** 0.8152[cite: 7]
+- **Tasa de Falsos Positivos (FPR):** 0.0088%[cite: 7]
 
 ---
 
-## 5. Importancia de Variables (Top 10 Features)
+## 4. Importancia de Variables (Top 10 Gain Weights)
+Las 10 variables con mayor peso en la discriminación de riesgo transaccional[cite: 7]:
 
-| Posición | Variable | Weight / Gain Ratio |
-| :---: | :--- | :---: |
-| 1 | `variable_15` | `0.3191` |
-| 2 | `variable_19` | `0.1025` |
-| 3 | `variable_17` | `0.0550` |
-| 4 | `variable_25` | `0.0406` |
-| 5 | `deciles` | `0.0295` |
-| 6 | `variable_12` | `0.0242` |
-| 7 | `variable_16` | `0.0207` |
-| 8 | `variable_09` | `0.0202` |
-| 9 | `variable_08` | `0.0184` |
-| 10 | `variable_10` | `0.0183` |
-
----
-
-## 6. Hiperparámetros Clave del Entrenador
-* **`n_estimators`:** `1500`
-* **`learning_rate`:** `0.0516`
-* **`max_depth`:** `5`
-* **`scale_pos_weight`:** `201.21` *(Ajuste clave para balancear la clase minoritaria)*
-* **`subsample`:** `0.9658`
-* **`colsample_bytree`:** `0.6261`
-* **`eval_metric`:** `aucpr`
-* **`early_stopping_rounds`:** `20`
+1. `variable_15` (35.22%)[cite: 7]
+2. `variable_19` (8.90%)[cite: 7]
+3. `variable_17` (5.11%)[cite: 7]
+4. `variable_25` (3.57%)[cite: 7]
+5. `deciles` (2.94%)[cite: 7]
+6. `amount_log` (2.37%)[cite: 7]
+7. `variable_12` (2.36%)[cite: 7]
+8. `variable_21` (2.34%)[cite: 7]
+9. `day` (2.31%)[cite: 7]
+10. `variable_16` (2.01%)[cite: 7]
 
 ---
 
-## 7. Consideraciones de Monitoreo y Mantenimiento
-1. **Data Drift:** Monitorear periódicamente la distribución de las variables top (`variable_15`, `variable_19`, `variable_17`) mediante KS-test o PSI (Population Stability Index).
-2. **Concept Drift:** Monitorear semanalmente la tasa de Falsos Negativos y el PR-AUC real conforme se obtengan las confirmaciones o reclamos por fraude.
-3. **Reentrenamiento:** Se recomienda reentrenar el modelo si el PR-AUC cae por debajo de `0.80` o si el drift de las características principales supera un PSI de `0.25`.
+## 5. Consideraciones de Despliegue y Ética
+- **Manejo de Falsos Positivos:** Con una precisión del 93.75% y solo 5 falsos positivos detectados en la prueba, el impacto por fricción operacional o frustración de clientes legítimos es sumamente bajo[cite: 7].
+- **Uso Recomendado:** Inferencia automatizada de riesgo para decisiones en línea (Aprobar/Bloquear o Derivar a revisión manual transacciones cercanas al umbral).
+- **Limitaciones:** El modelo requiere que las variables de entrada sigan el esquema numérico estandarizado y que los montos respeten la escala logarítmica calculada en el pipeline[cite: 6, 7].

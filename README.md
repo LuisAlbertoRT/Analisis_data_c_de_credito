@@ -1,56 +1,64 @@
-# 🛡️ Fraud Detector XGBoost
+# 🛡️ Fraud Detection Engine — XGBoost Architecture
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
-[![XGBoost](https://img.shields.io/badge/XGBoost-v2.0%2B-red.svg)](https://xgboost.readthedocs.io/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-v1.3%2B-orange.svg)](https://scikit-learn.org/)
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)
+![XGBoost](https://img.shields.io/badge/Model-XGBoost-orange?style=flat-square)
+![PR-AUC](https://img.shields.io/badge/PR--AUC-0.8860-brightgreen?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Production--Ready-success?style=flat-square)
 
-Sistema de clasificación supervisada basado en **XGBoost** diseñado para la detección en tiempo real de transacciones financieras fraudulentas bajo entornos de **alto desbalance de clases**.
+Solución de Machine Learning de extremo a extremo para la detección y mitigación de fraude transaccional en entornos de alto desbalance de clases. El sistema utiliza una arquitectura basada en **XGBoost Classifier** optimizado mediante binarización de probabilidad y análisis fuera de muestra (Out-of-Fold).
+
+
+## 🎯 Descripción del Problema
+
+El objetivo es clasificar y prevenir operaciones fraudulentas en solicitudes transaccionales mediante datos históricos. 
+
+### Retos Clave:
+* **Desbalance Severo:** El conjunto de datos cuenta con menos del **0.2%** de casos positivos de fraude (492 transacciones de 284,807).
+* **Anonimización:** Variables numéricas transformadas donde solo se dispone directamente del sello de tiempo, monto y etiqueta.
+* **Costo Asimétrico:** Alto costo de los Falsos Negativos (fraude no capturado) frente al costo por fricción operativa de Falsos Positivos (bloqueo legítimo).
 
 ---
 
-## 📌 Descripción del Proyecto
-
-El proyecto implementa un pipeline completo de Machine Learning orientado a resolver el problema de fraude transaccional. La solución prioriza la métrica **PR-AUC** y el ajuste fino del umbral de decisión mediante la optimización de **$F_2\text{-Score}$**, reduciendo al mínimo los Falsos Positivos mientras mantiene una alta cobertura (Recall) de transacciones sospechosas.
-
-### 🔑 Aspectos Clave
-* **Tratamiento del Desbalance:** Optimización mediante `scale_pos_weight` (~201.21) y función de pérdida adaptada a curvas Precision-Recall (`aucpr`).
-* **Umbral de Decisión Óptimo:** Calibrado en **$\tau = 0.9760$** para maximizar el retorno de negocio y minimizar la fricción con clientes legítimos.
-* **Control de Overfitting:** Regularización estricta (`max_depth=5`, `subsample=0.965`, `colsample_bytree=0.626`).
-
----
-
-## 📊 Resultados y Desempeño en Prueba (Test Set)
-
-Evaluado sobre un conjunto de prueba de **56,962 transacciones**:
-
-| Métrica | Valor Obtenido | Descripción |
-| :--- | :---: | :--- |
-| **PR-AUC (Principal)** | **`0.8738`** | Área bajo la curva Precision-Recall |
-| **ROC-AUC (Secundaria)**| **`0.9859`** | Área bajo la curva ROC |
-| **Precision** | **`96.34%`** | De cada 100 alertas, ~96 son fraudes reales |
-| **Recall** | **`80.61%`** | Captura del 80.61% del fraude total |
-| **$F_2\text{-Score}$** | **`0.8333`** | Balance con mayor peso en la captura de fraude |
-| **FPR (Falsas Alarmas)**| **`0.0053%`** | Solo 3 falsos positivos en 56,864 casos legítimos |
-
-### 🧮 Matriz de Confusión ($\tau = 0.9760$)
+## 📁 Estructura del Repositorio
 
 ```text
-                  Predicción Legítimo (0)    Predicción Fraude (1)
-Real Legítimo (0)          56,861 (TN)                 3 (FP)
-Real Fraude (1)                19 (FN)                79 (TP)
-
-
-
 .
 ├── Archivos_aux/
-│   ├── raw/                  # Datasets originales
-│   └── processed/            # Datasets transformados
-├── Notebooks/
-│   ├── model_metadata.json   # Metadatos del modelo e hiperparámetros
-│   └── model.joblib          # Binario serializado del modelo final
+│   └── datos_fraud.csv                 # Dataset original transaccional
 ├── Salidas/
-│   └── predicciones_test.csv # Predicciones exportadas (id_solicitante, score_modelo)
-├── MODEL_CARD.md             # Documentación detallada del modelo
-├── README.md                 # Visión general del proyecto
-└── requirements.txt          # Dependencias de Python
+│   ├── EDA-datos_fraud.html            # Reporte interactivo de análisis exploratorio (Sweetviz)
+│   ├── predicciones_test.csv           # Predicciones finales (ID Solicitante + Probability Score)
+│   ├── modelo_fraude_xgboost_final.joblib # Artefacto empaquetado (Production Wrapper + Model)
+│   └── model_metadata.json             # Metadatos, esquema de datos e hiperparámetros
+├── Documentos/
+│   └── Explicacion_Punto_Corte.pdf     # Justificación técnica del umbral de decisión operativo
+├── Notebook_Fraude_XGBoost.ipynb       # Jupyter Notebook documentado de end-to-end (EDA a Testing)
+├── MODEL_CARD.md                       # Documentación formal de la tarjeta del modelo
+└── README.md                           # Documentación principal del proyecto
+```
+
+```mermaid
+flowchart TD
+    A[Raw Dataset: datos_fraud.csv] --> B[Deduplicación & Limpieza Limpia]
+    B --> C[Feature Engineering & Transformación]
+    
+    subgraph Feature_Engineering [Ingeniería de Variables]
+        C1[amount_log: np.log1p]
+        C2[Flags: es_cero, es_uno_o_menos]
+        C3[Ciclos Cíclicos: hour_sin / hour_cos]
+        C4[Horario Nocturno: is_night_transaction]
+        C5[Deciles Out-of-Fold]
+    end
+    
+    C --> Feature_Engineering
+    Feature_Engineering --> D[Stratified Train / Test Split 80/20]
+    
+    D --> E[Benchmark de Modelos Iniciales]
+    E -->|Optuna Hyperparameter Search| F[Optimización Objetivo: PR-AUC Target]
+    
+    F --> G[XGBoost Classifier + Scale Pos Weight = 201.21]
+    G --> H[Cálculo de Umbral Óptimo OOF en Train: 0.9474]
+    H --> I[Empaquetamiento en Wrapper ProductionFraudClassifier]
+    I --> J[Generación de Artefactos .joblib, model_metadata.json y predicciones_test.csv]
+
+    ```
