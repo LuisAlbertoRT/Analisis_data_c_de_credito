@@ -24,17 +24,16 @@ El objetivo es clasificar y prevenir operaciones fraudulentas en solicitudes tra
 ```text
 .
 ├── Archivos_aux/
-│   └── datos_fraud.csv                 # Dataset original transaccional
-├── Salidas/
-│   ├── EDA-datos_fraud.html            # Reporte interactivo de análisis exploratorio (Sweetviz)
-│   ├── predicciones_test.csv           # Predicciones finales (ID Solicitante + Probability Score)
-│   ├── modelo_fraude_xgboost_final.joblib # Artefacto empaquetado (Production Wrapper + Model)
-│   └── model_metadata.json             # Metadatos, esquema de datos e hiperparámetros
-├── Documentos/
-│   └── Explicacion_Punto_Corte.pdf     # Justificación técnica del umbral de decisión operativo
-├── Notebook_Fraude_XGBoost.ipynb       # Jupyter Notebook documentado de end-to-end (EDA a Testing)
-├── MODEL_CARD.md                       # Documentación formal de la tarjeta del modelo
-└── README.md                           # Documentación principal del proyecto
+│   └── datos_fraud.csv                 
+├── Salidas/Modelos_finales
+│   ├── EDA-datos_fraud.html           
+│   ├── predicciones_test.csv           
+│   └── model_metadata.json             
+├── Noteboooks/
+│   └── Proceso bajo el que se fue construyendo el modelo   #Sirven de auxiliares
+├── D Resolucion.ipynb       
+├── MODEL_CARD.md                       
+└── README.md                           
 ```
 
 ```mermaid
