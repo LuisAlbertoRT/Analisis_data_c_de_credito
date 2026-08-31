@@ -39,26 +39,26 @@ El objetivo es clasificar y prevenir operaciones fraudulentas en solicitudes tra
 
 ```mermaid
 flowchart TD
-    A[Raw Dataset: datos_fraud.csv] --> B[Deduplicación & Limpieza Limpia]
-    B --> C[Feature Engineering & Transformación]
+    A[Conjunto de Datos Original: datos_fraud.csv] --> B[Deduplicación y Limpieza de Datos]
+    B --> C[Ingeniería y Transformación de Variables]
     
     subgraph Feature_Engineering [Ingeniería de Variables]
-        C1[amount_log: np.log1p]
-        C2[Flags: es_cero, es_uno_o_menos]
-        C3[Ciclos Cíclicos: hour_sin / hour_cos]
-        C4[Horario Nocturno: is_night_transaction]
-        C5[Deciles Out-of-Fold]
+        C1[Transformación Logarítmica: amount_log con np.log1p]
+        C2[Indicadores Binarios: es_cero, es_uno_o_menos]
+        C3[Transformaciones Cíclicas: hour_sin / hour_cos]
+        C4[Flag Horario Nocturno: is_night_transaction]
+        C5[Deciles Fuera de Muestra - Out-of-Fold]
     end
     
     C --> Feature_Engineering
-    Feature_Engineering --> D[Stratified Train / Test Split 80/20]
+    Feature_Engineering --> D[División Estratificada Entrenar / Probar 80/20]
     
-    D --> E[Benchmark de Modelos Iniciales]
-    E -->|Optuna Hyperparameter Search| F[Optimización Objetivo: PR-AUC Target]
+    D --> E[Evaluación Comparativa de Modelos Iniciales]
+    E -->|Búsqueda de Hiperparámetros con Optuna| F[Métrica Objetivo de Optimización: PR-AUC]
     
-    F --> G[XGBoost Classifier + Scale Pos Weight = 201.21]
-    G --> H[Cálculo de Umbral Óptimo OOF en Train: 0.9474]
-    H --> I[Empaquetamiento en Wrapper ProductionFraudClassifier]
+    F --> G[Clasificador XGBoost + Scale Pos Weight = 201.21]
+    G --> H[Cálculo del Umbral Óptimo Out-of-Fold en Entrenar: 0.9474]
+    H --> I[Encapsulamiento en Envoltorio Producción: ProductionFraudClassifier]
     I --> J[Generación de Artefactos .joblib, model_metadata.json y predicciones_test.csv]
 
     ```
